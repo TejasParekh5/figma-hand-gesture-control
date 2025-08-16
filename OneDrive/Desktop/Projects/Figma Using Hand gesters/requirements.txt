@@ -1,21 +1,21 @@
 # Core dependencies - Minimal optimized setup
-opencv-python==4.8.1.78
-mediapipe==0.10.7
-numpy==1.24.3
+opencv-python>=4.8.0
+mediapipe>=0.10.13
+numpy>=1.24.0
 
 # Browser automation - Choose one based on preference
-selenium==4.15.2
-webdriver-manager==4.0.1
+selenium>=4.15.0
+webdriver-manager>=4.0.0
 
 # Optional: Advanced automation (uncomment if needed)
 # playwright==1.40.0
 
 # Computer vision utilities
-pyautogui==0.9.54
+pyautogui>=0.9.50
 
 # CLI and display utilities  
-click==8.1.7
-rich==13.7.0
+click>=8.1.0
+rich>=13.7.0
 
 # Development dependencies (optional)
 # pytest==7.4.3
