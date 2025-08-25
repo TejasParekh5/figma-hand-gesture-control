@@ -1,7 +1,10 @@
-# Core dependencies - Minimal optimized setup
+# Core dependencies - Optimized for speed
 opencv-python>=4.8.0
-mediapipe>=0.10.13
-numpy>=1.24.0
+ultralytics>=8.0.0  # YOLOv8 for fast gesture detection
+numpy>=1.24.0,<2.0.0
+
+# Alternative: MediaPipe (heavier, comment out if using YOLO)
+# mediapipe>=0.10.13
 
 # Browser automation - Choose one based on preference
 selenium>=4.15.0

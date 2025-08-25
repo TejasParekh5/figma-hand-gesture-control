@@ -4,28 +4,28 @@ Simple, optimized mapping logic.
 """
 
 from typing import Optional, Dict
-from .gesture_detector import Gesture, GestureType
 
 
 class GestureMapper:
     """Maps gestures to Figma actions."""
 
     def __init__(self):
-        # Simple gesture to action mapping
+        # Simple gesture string to action mapping for ultra-fast detector
         self.gesture_actions = {
-            GestureType.SELECT: "select",
-            GestureType.MOVE: "move",
-            GestureType.CREATE_RECT: "create_rectangle",
-            GestureType.CREATE_CIRCLE: "create_circle",
-            GestureType.DELETE: "delete",
-            GestureType.UNDO: "undo",
-            GestureType.ZOOM: "zoom",
-            GestureType.PAN: "pan"
+            "open_palm": "select",
+            "point": "select",
+            "grab": "move",
+            "ok": "create_rectangle",
+            "peace": "create_circle",
+            "thumb_down": "delete",
+            "rock": "undo",
+            "index_point": "pan",
+            "thumbs_up": "zoom"
         }
 
-    def map_gesture_to_action(self, gesture: Gesture) -> Optional[str]:
-        """Convert gesture to Figma action."""
-        if gesture.confidence < 0.7:  # Confidence threshold
+    def map_gesture_to_action(self, gesture_name: str, confidence: float = 1.0) -> Optional[str]:
+        """Convert gesture string to Figma action."""
+        if confidence < 0.7:  # Confidence threshold
             return None
 
-        return self.gesture_actions.get(gesture.type, None)
+        return self.gesture_actions.get(gesture_name, None)

@@ -4,7 +4,7 @@ Supports Selenium and Playwright with optimized Figma-specific actions.
 """
 
 import asyncio
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -15,7 +15,16 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from .gesture_detector import Gesture, GestureType
+# Simple gesture result class for compatibility
+
+
+class GestureResult:
+    """Simplified gesture result for browser actions."""
+
+    def __init__(self, gesture: str, confidence: float = 0.0, position: Tuple[int, int] = (0, 0)):
+        self.gesture = gesture
+        self.confidence = confidence
+        self.position = position
 
 
 class BrowserController:
@@ -39,7 +48,7 @@ class BrowserController:
     async def initialize(self):
         """Initialize browser driver."""
         try:
-            if self.browser_type == "chrome":
+            if self.browser_type.lower() in ["chrome", "brave"]:
                 options = ChromeOptions()
                 if self.headless:
                     options.add_argument("--headless")
@@ -47,6 +56,20 @@ class BrowserController:
                 options.add_argument("--disable-dev-shm-usage")
                 options.add_argument("--disable-web-security")
                 options.add_argument("--allow-running-insecure-content")
+
+                # For Brave browser, try to find Brave executable
+                if self.browser_type.lower() == "brave":
+                    import os
+                    brave_paths = [
+                        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+                        r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
+                        r"C:\Users\{}\AppData\Local\BraveSoftware\Brave-Browser\Application\brave.exe".format(
+                            os.getenv('USERNAME'))
+                    ]
+                    for path in brave_paths:
+                        if os.path.exists(path):
+                            options.binary_location = path
+                            break
 
                 self.driver = webdriver.Chrome(
                     service=webdriver.chrome.service.Service(
@@ -82,7 +105,7 @@ class BrowserController:
         # Wait for page to load
         await asyncio.sleep(2)
 
-    async def execute_action(self, action: str, gesture: Gesture):
+    async def execute_action(self, action: str, gesture: GestureResult):
         """Execute Figma action based on gesture."""
         try:
             canvas = self.wait.until(
